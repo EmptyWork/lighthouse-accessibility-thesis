@@ -1,0 +1,21 @@
+{
+  "name": "lighthouse-link-thesis",
+  "version": "0.0.1",
+  "description": "a way to automatically use lighthouse to get accessibility report number",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "node index.js",
+    "clean": "node clean.js"
+  },
+  "keywords": [
+    "automated-tools",
+    "lighthouse"
+  ],
+  "author": "EmptyWork",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^3.2.4",
+    "lighthouse": "^10.2.0"
+  }
+}
