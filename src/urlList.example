@@ -1,0 +1,7 @@
+const _urlList = [
+    // you can add more links in here, but keep in mind, the more links you add
+    // the more resource it will use
+    "https://www.emptywork.my.id" 
+];
+
+export { _urlList as urlList };
