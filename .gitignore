@@ -2,3 +2,5 @@ node_modules/
 
 /out/
 /src/urlList.js
+
+.gitlog
