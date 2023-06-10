@@ -4,4 +4,7 @@ const _urlList = [
     "https://www.emptywork.my.id" 
 ];
 
-export { _urlList as urlList };
+const _options = {
+}
+
+export { _urlList as urlList, _options as options };
