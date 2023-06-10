@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "start": "npm run clean && npm run test",
     "test": "node index.js",
     "clean": "node clean.js"
   },
