@@ -5,13 +5,15 @@ if (!existsSync('./src/urlList.js')) copyFileSync('./src/urlList.example', './sr
 import { urlList, options, execOptions } from './src/urlList.js'
 
 Object.prototype.isEmpty = (obj) => {
-    for (const prop in obj) {
-        if (Object.hasOwn(obj, prop)) {
-            return false;
-        }
-    }
+    for (const prop in obj)
+        if (Object.hasOwn(obj, prop)) return false
 
-    return true;
+    return true
+}
+
+Array.prototype.isEmpty = (arr) => {
+    if (arr === undefined || arr.length === 0) return false
+    return true
 }
 
 const execResult = (err = null, out, outerr = null) => {
