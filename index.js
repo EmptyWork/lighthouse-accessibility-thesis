@@ -1,8 +1,8 @@
 import { series } from 'async'
 import { exec } from 'child_process'
-import { readFileSync, writeFileSync, existsSync, mkdirSync, copyFileSync, write, writeFile } from 'fs'
+import { readFileSync, writeFileSync, existsSync, mkdirSync, copyFileSync } from 'fs'
 if (!existsSync('./src/urlList.js')) copyFileSync('./src/urlList.example', './src/urlList.js')
-import { urlList, options } from './src/urlList.js'
+import { urlList, options, execOptions } from './src/urlList.js'
 
 Object.prototype.isEmpty = (obj) => {
     for (const prop in obj) {
