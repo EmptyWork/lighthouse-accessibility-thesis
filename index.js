@@ -17,13 +17,19 @@ Array.prototype.isEmpty = (arr) => {
 }
 
 const execResult = (err = null, out, outerr = null) => {
+    const isOptionsCategories = (!Array.isEmpty(options?.categories) ?? false) ? `--only-categories=${lighthouseCategories(options?.categories ?? "accessibility")} ` : ""
 
     let accessibilityScores = (!existsSync('./out/scores.json')) ? readFileSync('./src/scores.json') : readFileSync('./out/scores.json')
 
     const data = JSON.parse(out)
+
+    const commandToRun = `lighthouse ${data.requestedUrl} ${isOptionsCategories}--output json`
+    console.log(`command stopped: ${commandToRun}`)
+
     const accessibilityScoresJSON = JSON.parse(accessibilityScores)
     const categoriesScoresObject = {}
-    const optionCategories = options.categories ?? ["accessibility", "pwa", "best-practices", "performance", "seo"];
+    const categories = (!Array.isEmpty(options?.categories)) ? options?.categories : undefined
+    const optionCategories = categories ?? ["accessibility", "pwa", "best-practices", "performance", "seo"]
 
     optionCategories.forEach(category => {
         let categoryScore = data?.categories[category].score
@@ -31,28 +37,32 @@ const execResult = (err = null, out, outerr = null) => {
         categoriesScoresObject[category] = categoryScore
     })
 
-    accessibilityScoresJSON[data.requestedUrl] = categoriesScoresObject
+    accessibilityScoresJSON[data?.requestedUrl] = categoriesScoresObject
 
     const newAccessibilityJSON = JSON.stringify(accessibilityScoresJSON)
 
     if (!existsSync('./out/')) mkdirSync('./out/')
 
     if (!existsSync('./out/logs')) mkdirSync('./out/logs')
-    const rawOutputFilename = `./out/logs/${data.requestedUrl.split('.')[1]}_${Date.now()}.json`
+
+    const logFileNameBasedOnUrl = data?.requestedUrl.replace(/^(http|https):\/\/(www.|)/g, '').replaceAll("/", "").split('.').reverse().join('.')
+    const rawOutputFilename = `./out/logs/${logFileNameBasedOnUrl}-${optionCategories
+        .join('-')}-${Date.now()}.json`
 
     writeFileSync(rawOutputFilename, JSON.stringify(data), { flag: 'w' })
     return writeFileSync('./out/scores.json', newAccessibilityJSON, { flag: 'w' })
 }
 
 const testURL = (urlToCheck, options = {}) => {
-    const isOptionsCategories = (!Object.isEmpty(options.categories) ?? false) ? `--only-categories=${lighthouseCategories(options?.categories ?? "accessibility")}` : ""
-    const commandToRun = `lighthouse ${urlToCheck} ${isOptionsCategories} --output json`
+    const isOptionsCategories = (!Array.isEmpty(options?.categories) ?? false) ? `--only-categories=${lighthouseCategories(options?.categories ?? "accessibility")} ` : ""
+    const commandToRun = `lighthouse ${urlToCheck} ${isOptionsCategories}--output json --disable-full-page-screenshot`
 
     console.log(`running command: ${commandToRun}`)
 
     series([
-        () => exec(commandToRun, execResult),
+        () => exec(commandToRun, execOptions, execResult),
         // () => exec("lighthouse https://emptywork.my.id --output json >> dump", (err, stdout, stderr) => console.log(stdout))
+        // () => exec("lighthouse --help", (err, stdout, stderr) => console.log(stdout))
     ])
 }
 
