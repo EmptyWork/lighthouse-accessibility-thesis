@@ -3,6 +3,8 @@ import { exec } from 'child_process'
 import { readFileSync, writeFileSync, existsSync, mkdirSync, copyFileSync } from 'fs'
 if (!existsSync('./src/urlList.js')) copyFileSync('./src/urlList.example', './src/urlList.js')
 import { urlList, options, execOptions } from './src/urlList.js'
+import { makeCommandFromURL } from './src/lib/commandHandlers.js'
+import { getCategoriesFromCategoriesFlags, getCurrentCategories } from './src/lib/categoriesHandlers.js'
 
 Object.prototype.isEmpty = (obj) => {
     for (const prop in obj)
@@ -17,19 +19,17 @@ Array.prototype.isEmpty = (arr) => {
 }
 
 const execResult = (err = null, out, outerr = null) => {
-    const isOptionsCategories = (!Array.isEmpty(options?.categories) ?? false) ? `--only-categories=${lighthouseCategories(options?.categories ?? "accessibility")} ` : ""
-
     let accessibilityScores = (!existsSync('./out/scores.json')) ? readFileSync('./src/scores.json') : readFileSync('./out/scores.json')
 
     const data = JSON.parse(out)
 
-    const commandToRun = `lighthouse ${data.requestedUrl} ${isOptionsCategories}--output json`
+    const commandToRun = makeCommandFromURL(data?.requestedUrl, options)
     console.log(`command stopped: ${commandToRun}`)
 
     const accessibilityScoresJSON = JSON.parse(accessibilityScores)
     const categoriesScoresObject = {}
-    const categories = (!Array.isEmpty(options?.categories)) ? options?.categories : undefined
-    const optionCategories = categories ?? ["accessibility", "pwa", "best-practices", "performance", "seo"]
+    const categories = getCategoriesFromCategoriesFlags(options?.categories)
+    const optionCategories = getCurrentCategories(categories)
 
     optionCategories.forEach(category => {
         let categoryScore = data?.categories[category].score
@@ -54,8 +54,7 @@ const execResult = (err = null, out, outerr = null) => {
 }
 
 const testURL = (urlToCheck, options = {}) => {
-    const isOptionsCategories = (!Array.isEmpty(options?.categories) ?? false) ? `--only-categories=${lighthouseCategories(options?.categories ?? "accessibility")} ` : ""
-    const commandToRun = `lighthouse ${urlToCheck} ${isOptionsCategories}--output json --disable-full-page-screenshot`
+    const commandToRun = makeCommandFromURL(urlToCheck, options)
 
     console.log(`running command: ${commandToRun}`)
 
@@ -64,11 +63,6 @@ const testURL = (urlToCheck, options = {}) => {
         // () => exec("lighthouse https://emptywork.my.id --output json >> dump", (err, stdout, stderr) => console.log(stdout))
         // () => exec("lighthouse --help", (err, stdout, stderr) => console.log(stdout))
     ])
-}
-
-const lighthouseCategories = (categories = []) => {
-    if (typeof categories == "string") return categories
-    return categories.join(',')
 }
 
 urlList.forEach(url => testURL(url, options))
