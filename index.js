@@ -14,8 +14,7 @@ Object.prototype.isEmpty = (obj) => {
 }
 
 Array.prototype.isEmpty = (arr) => {
-    if (arr === undefined || arr.length === 0) return false
-    return true
+    return (arr === undefined || arr.length === 0) ? false : true
 }
 
 const execResult = (err = null, out, outerr = null) => {
