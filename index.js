@@ -5,6 +5,7 @@ if (!existsSync('./src/urlList.js')) copyFileSync('./src/urlList.example', './sr
 import { urlList, options, execOptions } from './src/urlList.js'
 import { makeCommandFromURL } from './src/lib/commandHandlers.js'
 import { getCategoriesFromCategoriesFlags, getCurrentCategories } from './src/lib/categoriesHandlers.js'
+import { getCategoriesFlags } from "./src/lib/categoriesHandlers.js"
 
 Object.prototype.isEmpty = (obj) => {
     for (const prop in obj)
@@ -22,8 +23,8 @@ const execResult = (err = null, out, outerr = null) => {
 
     const data = JSON.parse(out)
 
-    const commandToRun = makeCommandFromURL(data?.requestedUrl, options)
-    console.log(`command stopped: ${commandToRun}`)
+    const { commandToRun } = makeCommandFromURL(data?.requestedUrl, options)
+    if (options?.consoleLog ?? true) console.log(`Stopped Test on ${data?.requestedUrl}`)
 
     const accessibilityScoresJSON = JSON.parse(accessibilityScores)
     const categoriesScoresObject = {}
@@ -44,7 +45,9 @@ const execResult = (err = null, out, outerr = null) => {
 
     if (!existsSync('./out/logs')) mkdirSync('./out/logs')
 
-    const logFileNameBasedOnUrl = data?.requestedUrl.replace(/^(http|https):\/\/(www.|)/g, '').replaceAll("/", "").split('.').reverse().join('.')
+    const REGEX_HTTPS_HTTP = /^(http|https):\/\/(www.|)/g
+
+    const logFileNameBasedOnUrl = data?.requestedUrl.replace(REGEX_HTTPS_HTTP, '').replaceAll("/", "").split('.').reverse().join('.')
     const rawOutputFilename = `./out/logs/${logFileNameBasedOnUrl}-${optionCategories
         .join('-')}-${Date.now()}.json`
 
@@ -53,9 +56,8 @@ const execResult = (err = null, out, outerr = null) => {
 }
 
 const testURL = (urlToCheck, options = {}) => {
-    const commandToRun = makeCommandFromURL(urlToCheck, options)
-
-    console.log(`running command: ${commandToRun}`)
+    const { commandToRun } = makeCommandFromURL(urlToCheck, options)
+    if (options?.consoleLog ?? true) console.log(`Running Test on ${urlToCheck}`)
 
     series([
         () => exec(commandToRun, execOptions, execResult),
@@ -64,4 +66,14 @@ const testURL = (urlToCheck, options = {}) => {
     ])
 }
 
-urlList.forEach(url => testURL(url, options))
+const main = (urlList, options) => {
+    const isOptionsCategories = getCategoriesFlags(options?.categories)
+    const currentFlags = `${isOptionsCategories}--output json --disable-full-page-screenshot --chrome-flags="--no-sandbox --headless --disable-gpu"`
+
+    console.log(`TLighthouse ${process.env.npm_package_version} - Thesis Example Code`)
+    console.log(`Running with these Flags: ${currentFlags}\n`)
+
+    urlList.forEach((url, index) => { testURL(url, options) })
+}
+
+main(urlList, options)
