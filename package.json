@@ -1,13 +1,16 @@
 {
   "name": "lighthouse-link-thesis",
-  "version": "0.0.4",
+  "version": "0.0.4c",
   "description": "a way to automatically use lighthouse to get accessibility report number",
-  "main": "index.js",
+  "main": "index.class.js",
   "type": "module",
   "scripts": {
     "start": "npm run clean && npm run test",
-    "test": "node index.js",
-    "clean": "node clean.js"
+    "start:class": "npm run clean && npm run test:class",
+    "test": "node index",
+    "test:class": "node index.class",
+    "clean": "node clean",
+    "exp": "node test"
   },
   "keywords": [
     "automated-tools",

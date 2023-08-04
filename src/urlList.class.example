@@ -1,0 +1,16 @@
+export default class Config {
+    static urlList = [
+        // you can add more links in here, but keep in mind, the more links you add
+        // the more resource it will use
+        "https://emptywork.my.id", // my main website
+    ]
+
+    static appOptions = {
+        "categories": ["accessibility", "seo"],
+        "consoleLog": true
+    }
+
+    static execOptions = {
+        "maxBuffer": 2048 * 1024
+    }
+}
