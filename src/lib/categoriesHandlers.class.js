@@ -1,7 +1,4 @@
-
-Array.prototype.isEmpty = (arr) => {
-    return (arr === undefined || arr.length === 0) ? false : true
-}
+import Utility from './utilities.class.js'
 
 class Categories {
     getCategoriesFlags = array => {
@@ -17,7 +14,7 @@ class Categories {
     }
 
     getCategoriesFromCategoriesFlags = array => {
-        return (!Array.isEmpty(array)) ? array : undefined
+        return (!Utility.isEmpty(array)) ? array : undefined
     }
 }
 
