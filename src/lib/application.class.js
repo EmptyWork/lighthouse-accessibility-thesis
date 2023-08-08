@@ -2,15 +2,7 @@ import { series } from "async"
 import { exec } from 'child_process'
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs'
 import { getCategoriesFlags, getCategoriesFromCategoriesFlags, getCurrentCategories } from "./categoriesHandlers.class.js"
-import { makeCommandFromURL } from "./commandHandlers.js"
-
-Object.prototype.isEmpty = (obj) => {
-    for (const prop in obj) (Object.hasOwn(obj, prop)) ? false : true
-}
-
-Array.prototype.isEmpty = (arr) => {
-    return (arr === undefined || arr.length === 0) ? false : true
-}
+import Command from "./commandHandlers.class.js"
 
 export default class ThesisLighthouse {
     options
@@ -20,20 +12,10 @@ export default class ThesisLighthouse {
         this.options = appOptions
         this.execOptions = execOptions
         this.urlList = urlList
-
-        if (this.options?.consoleLog) console.log(this.options)
-
-        const isOptionsCategories = getCategoriesFlags(this.options?.categories)
-        const currentFlags = `${isOptionsCategories}\n\t--output json \n\t--disable-full-page-screenshot \n\t--chrome-flags="\n\t\t--no-sandbox \n\t\t--headless \n\t\t--disable-gpu"`
-
-        console.log(`ThesisLighthouse ${process.env.npm_package_version} - Thesis Example Code`)
-        console.log(`Running with these flags: ${currentFlags}\n`)
-
-        this.urlList.forEach((url, index) => { this.testURL(url, this.options) })
     }
 
     testURL(urlToCheck, options = {}) {
-        const { commandToRun } = makeCommandFromURL(urlToCheck, options)
+        const { commandToRun } = Command.make(urlToCheck, options)
         if (options?.consoleLog ?? true) console.log(`Running Test on ${urlToCheck}`)
 
         series([
@@ -77,5 +59,17 @@ export default class ThesisLighthouse {
 
         writeFileSync(rawOutputFilename, JSON.stringify(data), { flag: 'w' })
         return writeFileSync('./out/scores.json', newAccessibilityJSON, { flag: 'w' })
+    }
+
+    start() {
+        if (this.options?.consoleLog) console.log(this.options)
+
+        const isOptionsCategories = getCategoriesFlags(this.options?.categories)
+        const currentFlags = `${isOptionsCategories}\n\t--output json \n\t--disable-full-page-screenshot \n\t--chrome-flags="\n\t\t--no-sandbox \n\t\t--headless \n\t\t--disable-gpu"`
+
+        console.log(`ThesisLighthouse ${process.env.npm_package_version} - Thesis Example Code`)
+        console.log(`Running with these flags: ${currentFlags}\n`)
+
+        this.urlList.forEach((url, index) => { this.testURL(url, this.options) })
     }
 }
