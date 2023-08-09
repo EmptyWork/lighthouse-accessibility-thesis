@@ -1,6 +1,6 @@
 {
   "name": "lighthouse-link-thesis",
-  "version": "0.0.5c",
+  "version": "0.0.6c",
   "description": "a way to automatically use lighthouse to get accessibility report number",
   "main": "index.class.js",
   "type": "module",
