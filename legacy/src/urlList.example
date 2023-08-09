@@ -1,0 +1,15 @@
+const _urlList = [
+    // you can add more links in here, but keep in mind, the more links you add
+    // the more resource it will use
+    "https://www.emptywork.my.id" 
+]
+
+const _options = {
+    // "categories": []
+}
+
+const execOptions = {
+    "maxBuffer": 2048 * 1024
+}
+
+export { _urlList as urlList, _options as options }
