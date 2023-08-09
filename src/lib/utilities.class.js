@@ -1,10 +1,13 @@
 class Utility {
     isEmpty = data => {
-        let result;
-        if (typeof data === 'array') result = this.#isArrayEmpty(data)
-        if (typeof data === 'object') result = this.#isObjEmpty(data)
-
-        return result
+        switch (typeof data) {
+            case "array":
+                return this.#isArrayEmpty(data)
+            case 'object':
+                return this.#isObjEmpty(data)
+            default:
+                return false
+        }
     }
 
     #isArrayEmpty = (data = []) => {

@@ -5,10 +5,12 @@
   "main": "index.class.js",
   "type": "module",
   "scripts": {
-    "start": "npm run clean && npm run build",
-    "start:class": "npm run clean && npm run build:class",
-    "build": "node index",
-    "build:class": "node index.class",
+    "legacy": "npm run pre && npm run legacy:build",
+    "start": "npm run pre && npm run build",
+    "pre": "npm run clean && npm run setup",
+    "legacy:build": "node ./legacy/index",
+    "build": "node index.class",
+    "setup": "node setup",
     "test": "jest",
     "test:debug": "jest --detectOpenHandles",
     "clean": "node clean"
