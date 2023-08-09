@@ -1,7 +1,7 @@
 import { series } from 'async'
 import { exec } from 'child_process'
 import { readFileSync, writeFileSync, existsSync, mkdirSync, copyFileSync } from 'fs'
-if (!existsSync('./src/urlList.js')) copyFileSync('./src/urlList.example', './src/urlList.js')
+if (!existsSync('./legacy/src/urlList.js')) copyFileSync('./legacy/src/urlList.example', './legacy/src/urlList.js')
 import { urlList, options, execOptions } from './src/urlList.js'
 import { makeCommandFromURL } from './src/lib/commandHandlers.js'
 import { getCategoriesFromCategoriesFlags, getCurrentCategories } from './src/lib/categoriesHandlers.js'
@@ -70,7 +70,7 @@ const main = (urlList, options) => {
     const isOptionsCategories = getCategoriesFlags(options?.categories)
     const currentFlags = `${isOptionsCategories}--output json --disable-full-page-screenshot --chrome-flags="--no-sandbox --headless --disable-gpu"`
 
-    console.log(`TLighthouse ${process.env.npm_package_version} - Thesis Example Code`)
+    console.log(`[Legacy] TLighthouse ${process.env.npm_package_version} - Thesis Example Code`)
     console.log(`Running with these Flags: ${currentFlags}\n`)
 
     urlList.forEach((url, index) => { testURL(url, options) })

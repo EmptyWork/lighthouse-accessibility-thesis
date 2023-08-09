@@ -1,9 +1,10 @@
 node_modules/
 
 /out/
-/src/urlList.js
+/legacy/src/urlList.js
 /src/urlList.class.js
 
 .gitlog
 
 test.js
+performance.js

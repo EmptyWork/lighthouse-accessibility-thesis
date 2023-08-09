@@ -1,16 +1,19 @@
 {
   "name": "lighthouse-link-thesis",
-  "version": "0.0.4c",
+  "version": "0.0.6c",
   "description": "a way to automatically use lighthouse to get accessibility report number",
   "main": "index.class.js",
   "type": "module",
   "scripts": {
-    "start": "npm run clean && npm run test",
-    "start:class": "npm run clean && npm run test:class",
-    "test": "node index",
-    "test:class": "node index.class",
-    "clean": "node clean",
-    "exp": "node test"
+    "legacy": "npm run pre && npm run legacy:build",
+    "start": "npm run pre && npm run build",
+    "pre": "npm run clean && npm run setup",
+    "legacy:build": "node ./legacy/index",
+    "build": "node index.class",
+    "setup": "node setup",
+    "test": "jest",
+    "test:debug": "jest --detectOpenHandles",
+    "clean": "node clean"
   },
   "keywords": [
     "automated-tools",
@@ -21,5 +24,9 @@
   "dependencies": {
     "async": "^3.2.4",
     "lighthouse": "^10.2.0"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.22.5",
+    "jest": "^29.6.2"
   }
 }
