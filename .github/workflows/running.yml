@@ -4,12 +4,12 @@ on:
   pull_request:
     types: [synchronize, opened, reopened]
   push:
-    branches: [main]
+    branches: [main, development]
   workflow_dispatch:
 
 jobs:
   install:
-    name: Install and Running
+    name: Install and Run
 
     runs-on: ubuntu-latest
     
