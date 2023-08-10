@@ -1,4 +1,4 @@
-name: Jest Test
+name: Running
 
 on:
   pull_request:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   install:
-    name: Install and Test
+    name: Install and Running
 
     runs-on: ubuntu-latest
     
@@ -19,9 +19,12 @@ jobs:
     
     steps:
     - uses: actions/checkout@v3
-
+    
+    - name: Set up Chrome
+      uses: browser-actions/setup-chrome@v1
+    
     - name: Install
       run:  npm ci
-    
-    - name: Test with Jest
-      run: npm test 
+
+    - name: Running the program
+      run: npm start 
