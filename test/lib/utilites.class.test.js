@@ -1,4 +1,4 @@
-import Utility from "../../src/lib/utilities.class.js"
+import Utility, { LoggerType } from "../../src/lib/utilities.class.js"
 
 test('isEmpty of an empty Array', () => {
     expect(
@@ -51,7 +51,7 @@ test('Not isEmpty of not an empty Object', () => {
 
 test('Logger test', () => {
     const spyOn = jest.spyOn(console, 'log')
-    Utility.Logger(false, "Info", "Running Test on localhost")
+    Utility.Logger("Running Test on localhost", "Info", false)
     expect(
         spyOn
     ).not.toHaveBeenCalled()
@@ -59,8 +59,12 @@ test('Logger test', () => {
 
 test('Logger test', () => {
     const spyOn = jest.spyOn(console, 'log')
-    Utility.Logger(true, "Info", "Running Test on localhost")
+    Utility.Logger("Running Test on localhost", "Info")
     expect(
         spyOn
-    ).toHaveBeenCalledWith("Info: Running Test on localhost")
+    ).toHaveBeenCalledWith("Info:", "Running Test on localhost")
+})
+
+test('LoggerType.empty', () => {
+    expect(LoggerType.empty).toStrictEqual("")
 })
