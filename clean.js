@@ -1,9 +1,10 @@
 import { existsSync, rmSync } from 'fs'
+import { Logger, LoggerType } from "./src/lib/utilities.class.js"
 
 const cleanDirectory = () => {
-    if (!existsSync('./out/')) return console.error(`failed: dir out not exist`)
+    if (!existsSync('./out/')) return Logger(`\`./out\` not exist`, LoggerType.warning)
     rmSync('./out/', { recursive: true })
-    console.log(`complete: dir out has been deleted`)
+    Logger(`\`./out\` has been deleted`, LoggerType.info)
 }
 
 cleanDirectory()
