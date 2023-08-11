@@ -2,6 +2,7 @@ import { series } from "async"
 import { exec } from 'child_process'
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs'
 import { getCategoriesFlags, getCategoriesFromCategoriesFlags, getCurrentCategories } from "./categoriesHandlers.class.js"
+import { Logger, LoggerType } from "./utilities.class.js"
 import Command from "./commandHandlers.class.js"
 
 export default class ThesisLighthouse {
@@ -20,9 +21,10 @@ export default class ThesisLighthouse {
         this.#currentCategories = getCurrentCategories(categories)
     }
 
-    testURL = (urlToCheck, options = {}) => {
+    testURL = (urlToCheck, options = {}, currentIndex) => {
         const { commandToRun } = Command.make(urlToCheck, options)
-        if (options?.consoleLog ?? true) console.log(`Running Test on ${urlToCheck}`)
+
+        Logger(`Running Test on ${urlToCheck}`, LoggerType.info, options.consoleLog)
 
         series([
             () => exec(commandToRun, this.execOptions, this.execResult.bind(this))
@@ -36,7 +38,7 @@ export default class ThesisLighthouse {
         )
 
         const data = JSON.parse(out)
-        if (this.options?.consoleLog) console.log(`Stopped Test on ${data?.requestedUrl}`)
+        Logger(`Stopped Test on ${data?.requestedUrl}`, LoggerType.info, this.options?.consoleLog)
 
         const newAccessibilityJSON = this.#produceNewJSON(data, accessibilityScores)
 
@@ -80,19 +82,24 @@ export default class ThesisLighthouse {
     }
 
     #checkDir = () => {
-        if (!existsSync(`${this.#outputDir}`)) mkdirSync(`${this.#outputDir}`)
-        if (!existsSync(`${this.#outputDir}logs`)) mkdirSync(`${this.#outputDir}logs`)
+        this.#makeDirIfNotExists(`${this.#outputDir}`)
+        this.#makeDirIfNotExists(`${this.#outputDir}logs`)
+    }
+
+    #makeDirIfNotExists = (location) => {
+        if (!existsSync(location)) mkdirSync(location)
     }
 
     start = () => {
-        if (this.options?.consoleLog) console.log(this.options)
 
         const isOptionsCategories = getCategoriesFlags(this.options?.categories)
         const currentFlags = `${isOptionsCategories}\n\t--output json \n\t--disable-full-page-screenshot \n\t--chrome-flags="\n\t\t--no-sandbox \n\t\t--headless \n\t\t--disable-gpu"`
 
-        console.log(`ThesisLighthouse ${process.env.npm_package_version} - Thesis Example Code`)
-        console.log(`Running with these flags: ${currentFlags}\n`)
+        Logger(`Copyright (c) 2023 Stevarth`)
+        Logger(`ThesisLighthouse ${process.env.npm_package_version} - Thesis Example Code`)
+        Logger(this.options, LoggerType.info, this.options?.consoleLog)
+        Logger(`Running with these flags: ${currentFlags}\n`)
 
-        this.urlList.forEach((url, index) => { this.testURL(url, this.options) })
+        this.urlList.forEach((url, index) => { this.testURL(url, this.options, index) })
     }
 }
