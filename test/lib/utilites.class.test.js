@@ -68,3 +68,15 @@ test('Logger test', () => {
 test('LoggerType.empty', () => {
     expect(LoggerType.empty).toStrictEqual("")
 })
+
+test('LoggerType.info', () => {
+    expect(LoggerType.info).toStrictEqual("Info")
+})
+
+test('LoggerType.warning', () => {
+    expect(LoggerType.warning).toStrictEqual("Warning")
+})
+
+test('LoggerType.error', () => {
+    expect(LoggerType.error).toStrictEqual("Error")
+})
