@@ -1,4 +1,11 @@
 class Utility {
+    LoggerType = {
+        'info': "Info",
+        'warning': "Warning",
+        'error': "Error",
+        'empty': ""
+    }
+
     isEmpty = data => {
         switch (typeof data) {
             case "array":
@@ -8,6 +15,11 @@ class Utility {
             default:
                 return false
         }
+    }
+
+    Logger = (text, type = LoggerType.empty, condition = true) => {
+        const typeFormatted = (type === LoggerType.empty) ? `${type}` : `${type}:`
+        if (condition) console.log(`${typeFormatted}`, text)
     }
 
     #isArrayEmpty = (data = []) => {
@@ -22,3 +34,4 @@ class Utility {
 }
 
 export default new Utility()
+export const { Logger, LoggerType } = new Utility()
