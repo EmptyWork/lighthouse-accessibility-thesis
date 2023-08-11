@@ -22,6 +22,6 @@ To use this program you just need to follow this steps:
 - [Lighthouse CLI](https://github.com/GoogleChrome/lighthouse) (opensource - owned and trademarked by Google inc.)
 - [Async](https://github.com/caolan/async) (opensource)
 
-## Supports
+### Supports
 
 [![EmptyWork](https://raw.githubusercontent.com/EmptyWork/cpp-teaching/master/assets/active.svg)](https://emptywork.netlify.app)
