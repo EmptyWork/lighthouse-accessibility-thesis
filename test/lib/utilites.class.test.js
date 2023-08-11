@@ -49,3 +49,18 @@ test('Not isEmpty of not an empty Object', () => {
     ).toBe(true);
 });
 
+test('Logger test', () => {
+    const spyOn = jest.spyOn(console, 'log')
+    Utility.Logger(false, "Info", "Running Test on localhost")
+    expect(
+        spyOn
+    ).not.toHaveBeenCalled()
+})
+
+test('Logger test', () => {
+    const spyOn = jest.spyOn(console, 'log')
+    Utility.Logger(true, "Info", "Running Test on localhost")
+    expect(
+        spyOn
+    ).toHaveBeenCalledWith("Info: Running Test on localhost")
+})
