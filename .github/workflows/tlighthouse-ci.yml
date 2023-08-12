@@ -10,8 +10,9 @@ on:
 jobs:
   install:
     name: Install and Test
+    concurrency: staging_environment
 
-    runs-on: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ubuntu-latest
     
     strategy:
       matrix:
@@ -28,8 +29,9 @@ jobs:
   
   running:
     name: Install and Run
+    concurrency: staging_environment
 
-    runs-on: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ubuntu-latest
     
     strategy:
       matrix:
