@@ -1,3 +1,5 @@
+import { existsSync, copyFileSync } from 'fs'
+
 class Utility {
     LoggerType = {
         'info': "Info",
@@ -22,6 +24,10 @@ class Utility {
         if (condition) console.log(`${typeFormatted}`, text)
     }
 
+    copyIfNotExists = (location, source) => {
+        if (!existsSync(location)) copyFileSync(source, location)
+    }
+
     #isArrayEmpty = (data = []) => {
         return (data === undefined || data.length === 0) ? false : true
     }
@@ -34,4 +40,4 @@ class Utility {
 }
 
 export default new Utility()
-export const { Logger, LoggerType } = new Utility()
+export const { Logger, LoggerType, copyIfNotExists } = new Utility()

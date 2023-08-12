@@ -1,3 +1,3 @@
-import { existsSync, copyFileSync } from 'fs'
+import { copyIfNotExists } from "./src/lib/utilities.class.js";
 
-if (!existsSync('./src/urlList.class.js')) copyFileSync('./src/urlList.class.example', './src/urlList.class.js')
+copyIfNotExists('./src/urlList.class.js', './src/urlList.class.example')
