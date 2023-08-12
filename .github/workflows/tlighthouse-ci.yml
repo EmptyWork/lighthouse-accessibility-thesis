@@ -4,7 +4,7 @@ on:
   pull_request:
     types: [synchronize, opened, reopened]
   push:
-    branches: [main, development]
+    branches: [main, development, dev-workflows]
   workflow_dispatch:
 
 jobs:
