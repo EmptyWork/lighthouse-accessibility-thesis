@@ -8,20 +8,17 @@ on:
 
 jobs:
   install-ubuntu:
-    name: Install and Test
+    name: Install TLighthouse
     runs-on: ubuntu-latest
     
     steps:
     - uses: actions/checkout@v3
 
-    - name: Install
+    - name: Install Dependencies
       run:  npm ci
-    
-    - name: Test with Jest
-      run: npm test 
 
   test-ubuntu:
-    name: Test
+    name: Test TLighthouse
     needs: install-ubuntu
     runs-on: ubuntu-latest
     
@@ -36,7 +33,7 @@ jobs:
         run: npm test 
 
   running-ubuntu:
-    name: Run
+    name: Run TLighthouse
     needs: test-ubuntu
     runs-on: ubuntu-latest
     
