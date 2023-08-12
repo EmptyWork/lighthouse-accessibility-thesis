@@ -1,4 +1,4 @@
-name: Jest Test
+name: Initialize TLighthouse and Test using Jest
 
 on:
   pull_request:
@@ -25,3 +25,24 @@ jobs:
     
     - name: Test with Jest
       run: npm test 
+  
+  running:
+    name: Install and Run
+
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x, 20.x]
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Chrome
+      uses: browser-actions/setup-chrome@v1
+    
+    - name: Install
+      run:  npm ci
+
+    - name: Running the program
+      run: npm start 
