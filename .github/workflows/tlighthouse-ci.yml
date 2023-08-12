@@ -5,18 +5,11 @@ on:
     types: [synchronize, opened, reopened]
   push:
     branches: [main, development, dev-workflows]
-  workflow_dispatch:
 
 jobs:
-  install:
+  install-ubuntu:
     name: Install and Test
-    concurrency: staging_environment
-
     runs-on: ubuntu-latest
-    
-    strategy:
-      matrix:
-        node-version: [20.x]
     
     steps:
     - uses: actions/checkout@v3
@@ -26,25 +19,36 @@ jobs:
     
     - name: Test with Jest
       run: npm test 
-  
-  running:
-    name: Install and Run
-    concurrency: staging_environment
 
+  test-ubuntu:
+    name: Test
+    needs: install-ubuntu
     runs-on: ubuntu-latest
     
-    strategy:
-      matrix:
-        node-version: [20.x]
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+  
+      - name: Install Dependencies
+        run:  npm ci
+      
+      - name: Testing with Jest
+        run: npm test 
+
+  running-ubuntu:
+    name: Run
+    needs: test-ubuntu
+    runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v3
+    - name: Check out code
+      uses: actions/checkout@v3
+
+    - name: Install Dependencies
+      run:  npm ci
     
     - name: Set up Chrome
       uses: browser-actions/setup-chrome@v1
-    
-    - name: Install
-      run:  npm ci
 
     - name: Running the program
       run: npm start 
