@@ -1,4 +1,4 @@
-name: TLighthouse Setup and Test
+name: TLighthouse
 
 on:
   pull_request:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   install-ubuntu:
-    name: Install TLighthouse
+    name: Install on Ubuntu
     runs-on: ubuntu-latest
     
     steps:
@@ -18,7 +18,7 @@ jobs:
       run:  npm ci
   
   install-macos:
-    name: Install TLighthouse
+    name: Install on MacOS
     runs-on: macos-latest
     
     steps:
@@ -28,7 +28,7 @@ jobs:
       run:  npm ci
 
   install-windows:
-    name: Install TLighthouse
+    name: Install on Windows
     runs-on: windows-latest
     
     steps:
@@ -38,7 +38,7 @@ jobs:
       run:  npm ci
 
   test:
-    name: Test TLighthouse
+    name: Test with Jest
     needs: [install-ubuntu, install-macos, install-windows]
     runs-on: ubuntu-latest
     
@@ -53,7 +53,7 @@ jobs:
         run: npm test 
 
   running:
-    name: Run TLighthouse
+    name: Run with Node
     needs: test
     runs-on: ubuntu-latest
     
