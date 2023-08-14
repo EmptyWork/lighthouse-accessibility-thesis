@@ -42,7 +42,7 @@ export default class ThesisLighthouse {
 
         const newAccessibilityJSON = this.#produceNewJSON(data, accessibilityScores)
 
-        this.#checkDir()
+        this.#checkDir([`${this.#outputDir}`, `${this.#outputDir}logs`])
         const rawOutputFilename = this.#createFileName(data?.requestedUrl)
 
         writeFileSync(rawOutputFilename, JSON.stringify(data), { flag: 'w' })
@@ -81,9 +81,15 @@ export default class ThesisLighthouse {
         return (!existsSync(location)) ? readFileSync(backup) : readFileSync(location)
     }
 
-    #checkDir = () => {
-        this.#makeDirIfNotExists(`${this.#outputDir}`)
-        this.#makeDirIfNotExists(`${this.#outputDir}logs`)
+    #checkDir = (directories) => {
+        switch (typeof directories) {
+            case "object":
+                directories.forEach(directory => this.#makeDirIfNotExists(directory))
+                break;
+            case "string":
+                this.#makeDirIfNotExists(directories)
+                break;
+        }
     }
 
     #makeDirIfNotExists = (location) => {
@@ -91,7 +97,6 @@ export default class ThesisLighthouse {
     }
 
     start = () => {
-
         const isOptionsCategories = getCategoriesFlags(this.options?.categories)
         const currentFlags = `${isOptionsCategories}\n\t--output json \n\t--disable-full-page-screenshot \n\t--chrome-flags="\n\t\t--no-sandbox \n\t\t--headless \n\t\t--disable-gpu"`
 
