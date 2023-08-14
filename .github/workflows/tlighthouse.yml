@@ -1,0 +1,71 @@
+name: TLighthouse
+
+on:
+  pull_request:
+    types: [synchronize, opened, reopened]
+  push:
+    branches: [main, development, dev-workflows]
+
+jobs:
+  install-ubuntu:
+    name: Install on Ubuntu
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install Dependencies
+      run:  npm ci
+  
+  install-macos:
+    name: Install on MacOS
+    runs-on: macos-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install Dependencies
+      run:  npm ci
+
+  install-windows:
+    name: Install on Windows
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install Dependencies
+      run:  npm ci
+
+  test:
+    name: Test with Jest
+    needs: [install-ubuntu, install-macos, install-windows]
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+  
+      - name: Install Dependencies
+        run:  npm ci
+      
+      - name: Testing with Jest
+        run: npm test 
+
+  running:
+    name: Run with Node
+    needs: test
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v3
+
+    - name: Install Dependencies
+      run:  npm ci
+    
+    - name: Set up Chrome
+      uses: browser-actions/setup-chrome@v1
+
+    - name: Running the program
+      run: npm start 
