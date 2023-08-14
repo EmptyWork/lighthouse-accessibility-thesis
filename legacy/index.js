@@ -70,6 +70,7 @@ const main = (urlList, options) => {
     const isOptionsCategories = getCategoriesFlags(options?.categories)
     const currentFlags = `${isOptionsCategories}--output json --disable-full-page-screenshot --chrome-flags="--no-sandbox --headless --disable-gpu"`
 
+    console.log(`Copyright (c) 2023 Stevarth`)
     console.log(`[Legacy] TLighthouse ${process.env.npm_package_version} - Thesis Example Code`)
     console.log(`Running with these Flags: ${currentFlags}\n`)
 
