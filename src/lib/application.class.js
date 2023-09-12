@@ -42,7 +42,7 @@ export default class ThesisLighthouse {
 
         const newAccessibilityJSON = this.#produceNewJSON(data, accessibilityScores)
 
-        this.#checkDir([`${this.#outputDir}`, `${this.#outputDir}logs`])
+        this.#checkDirectory([`${this.#outputDir}`, `${this.#outputDir}logs`])
         const rawOutputFilename = this.#createFileName(data?.requestedUrl)
 
         writeFileSync(rawOutputFilename, JSON.stringify(data), { flag: 'w' })
@@ -56,9 +56,13 @@ export default class ThesisLighthouse {
     #createFileName = (url) => {
         const currentTime = new Date().toLocaleTimeString().replaceAll(":", "_")
         const REGEX_HTTPS_HTTP = /^(http|https):\/\/(www.|)/g
-        const logFileNameBasedOnUrl = url.replace(REGEX_HTTPS_HTTP, '').replaceAll("/", "").split('.').reverse().join('.')
+        const logFileNameBasedOnUrl = url.replace(REGEX_HTTPS_HTTP, '').replaceAll(":", "_").replaceAll("/", "").split('.').reverse().join('.')
+
+        Logger(`Proccessed name will be ${logFileNameBasedOnUrl}`, LoggerType.info, this.options?.consoleLog)
 
         const fileName = `${logFileNameBasedOnUrl}-${this.#currentCategories.join('-')}-${currentTime}.json`
+
+        Logger(`Data Saved to ${fileName}`, LoggerType.info, this.options?.consoleLog)
 
         return `${this.#outputDir}logs/${fileName}`
     }
@@ -81,7 +85,7 @@ export default class ThesisLighthouse {
         return (!existsSync(location)) ? readFileSync(backup) : readFileSync(location)
     }
 
-    #checkDir = (directories) => {
+    #checkDirectory = (directories) => {
         switch (typeof directories) {
             case "object":
                 directories.forEach(directory => this.#makeDirIfNotExists(directory))
